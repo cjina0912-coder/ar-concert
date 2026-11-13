@@ -38,7 +38,82 @@ function build(d){
  const runway=t.runway==='yes'||(t.runway!=='no'&&['돌출형 무대','대형 페스티벌'].includes(t.stageType));
  if(runway)box(base,3,height,6,floorColor,0,height/2,6.5);
  box(base,11,.16,.2,'#80cfff',0,8,-3);box(base,.2,8,.2,'#80cfff',-6.5,4,-3);box(base,.2,8,.2,'#80cfff',6.5,4,-3);
- if(t.screenStyle!=='none'){box(base,10,5,.3,'#10152e',0,4,-3.5);box(base,9.7,4.7,.03,'#6846b6',0,4,-3.3)}
+ 
+ // 학생이 설정한 무대 배경과 콘서트 타이틀
+ {
+   const canvas=document.createElement('canvas');
+   canvas.width=1024;
+   canvas.height=512;
+   const ctx=canvas.getContext('2d');
+
+   const backgrounds={
+     '우주':'#121338',
+     '별빛':'#1c174c',
+     '밤하늘':'#151e46',
+     '바다':'#125879',
+     '숲':'#175c45',
+     '도시':'#28345b',
+     '네온':'#571b75',
+     '불꽃':'#76253e'
+   };
+
+   const bg=String(t.background||'');
+   const bgColor=backgrounds[bg]||'#34216d';
+
+   const grad=ctx.createLinearGradient(0,0,1024,512);
+   grad.addColorStop(0,bgColor);
+   grad.addColorStop(1,'#080b24');
+   ctx.fillStyle=grad;
+   ctx.fillRect(0,0,1024,512);
+
+   // 별빛 장식
+   for(let i=0;i<90;i++){
+     const x=(i*137.5)%1024;
+     const y=(i*79.3)%512;
+     ctx.fillStyle='rgba(255,255,255,0.65)';
+     ctx.beginPath();
+     ctx.arc(x,y,i%3===0?2:1,0,Math.PI*2);
+     ctx.fill();
+   }
+
+   // 콘서트 타이틀
+   const title=String(d.title||'우리들의 콘서트');
+   ctx.textAlign='center';
+   ctx.textBaseline='middle';
+   ctx.shadowColor='#b785ff';
+   ctx.shadowBlur=25;
+   ctx.fillStyle='#ffffff';
+   ctx.font='bold 64px Arial, Malgun Gothic, sans-serif';
+
+   // 긴 제목은 두 줄로 표시
+   const chars=Array.from(title);
+   const lines=[];
+   for(let i=0;i<chars.length;i+=14){
+     lines.push(chars.slice(i,i+14).join(''));
+   }
+   lines.slice(0,3).forEach((line,i,arr)=>{
+     const y=256+(i-(arr.length-1)/2)*82;
+     ctx.fillText(line,512,y,930);
+   });
+
+   const texture=new THREE.CanvasTexture(canvas);
+   texture.colorSpace=THREE.SRGBColorSpace;
+
+   // LED 스크린 테두리
+   box(base,10.3,5.3,.25,'#10152e',0,4,-3.5);
+
+   // 스크린 앞면에 학생 배경과 제목 표시
+   const screen=new THREE.Mesh(
+     new THREE.PlaneGeometry(10,5),
+     new THREE.MeshBasicMaterial({
+       map:texture,
+       side:THREE.DoubleSide
+     })
+   );
+   screen.position.set(0,4,-3.32);
+   base.add(screen);
+ }
+
  // Visible fixtures: point/spot lights alone do not draw a lamp or a beam.
  for(let i=0;i<3;i++){
   const x=-4+i*4;
