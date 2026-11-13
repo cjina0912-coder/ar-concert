@@ -1,9 +1,18 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>AR 가상 콘서트</title><style>
 *{box-sizing:border-box}body{margin:0;background:#0b1023;color:white;font:15px system-ui,'Malgun Gothic',sans-serif}header{position:absolute;top:0;left:0;right:0;z-index:8;padding:12px;background:linear-gradient(#080d20ec,#080d2060);pointer-events:none}header h1{font-size:18px;margin:0 0 5px}#message{font-size:12px;color:#d6d8ff}#scene{position:absolute;inset:0;overflow:hidden}#camera{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}#scene canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none}#menu{position:absolute;bottom:0;left:0;right:0;z-index:10;padding:12px 12px max(12px,env(safe-area-inset-bottom));background:linear-gradient(transparent,#090d20f0 20%);display:flex;gap:7px;justify-content:center;flex-wrap:wrap}button{background:#50419b;color:#fff;border:1px solid #8175bb;border-radius:10px;padding:12px;font-size:13px;font-weight:700;min-height:44px}button:disabled{opacity:.45}#startXR{background:#077d6e}#fallback{background:#33477b}#controls{display:none;gap:6px;align-items:center}#controls button{padding:10px}#overlay{position:absolute;top:68px;left:10px;right:10px;z-index:9;font-size:12px;color:#eee;pointer-events:none}#arButton{position:absolute!important;bottom:110px!important;left:50%!important;transform:translateX(-50%)!important;z-index:12!important}#hint{background:#101933cc;border-radius:8px;padding:9px;display:inline-block}
 </style></head><body><video id="camera" autoplay muted playsinline></video><div id="scene"></div><header><h1 id="title">🎤 AR 가상 콘서트</h1><div id="message">공연 데이터를 불러오는 중입니다.</div></header><div id="overlay"><span id="hint">실제 AR 또는 카메라 합성 모드를 선택하세요.</span></div><div id="menu"><button id="startXR" disabled>📍 실제 AR 시작</button><button id="fallback" disabled>📷 카메라 합성 모드</button><div id="controls"><button id="smaller">－ 작게</button><button id="bigger">＋ 크게</button><button id="left">↶ 회전</button><button id="right">↷ 회전</button><button id="reset">중앙 정렬</button></div></div>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/"
+  }
+}
+</script>
+
 <script type="module">
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js';
-import {ARButton} from 'https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/webxr/ARButton.js';
+import * as THREE from 'three';
+import { ARButton } from 'three/addons/webxr/ARButton.js';
 const q=new URLSearchParams(location.search),id=q.get('id')||'',api=q.get('api')||'';
 const msg=document.querySelector('#message'),hint=document.querySelector('#hint'),video=document.querySelector('#camera'),controls=document.querySelector('#controls');
 const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(55,innerWidth/innerHeight,.01,100);
