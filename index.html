@@ -12,6 +12,11 @@
 #playerWrap iframe{height:110px}
 #songStatus{font-size:11px}
 @media(max-width:540px){#songsPanel{bottom:112px;left:8px;right:8px;max-height:38vh}#songCards{grid-template-columns:repeat(5,minmax(0,1fr))}#songCards button{min-height:44px;font-size:10px}#playerWrap iframe{height:95px}}
+
+/* Tablet/mobile override: original responsive top rule must not win. */
+#songsPanel{position:fixed!important;top:auto!important;bottom:calc(96px + env(safe-area-inset-bottom, 0px))!important;left:10px!important;right:10px!important;max-width:680px;max-height:min(40dvh,340px);z-index:11}
+@media(max-width:900px){#songsPanel{top:auto!important;bottom:calc(104px + env(safe-area-inset-bottom, 0px))!important;left:8px!important;right:8px!important;max-height:35dvh}}
+@media(max-height:650px){#songsPanel{max-height:30dvh}}
 </style></head><body><video id="camera" autoplay muted playsinline></video><div id="scene"></div><header><h1 id="title">🎤 AR 가상 콘서트</h1><div id="message">공연 데이터를 불러오는 중입니다.</div></header><div id="overlay"><span id="hint">실제 AR 또는 카메라 합성 모드를 선택하세요.</span></div><div id="songsPanel" class="collapsed"><div id="songsHeading"><h2>🎵 공연곡 5곡</h2><button id="songsToggle" type="button" aria-expanded="false">▲ 음악 펼치기</button></div><div id="songCards"></div><div id="playerWrap"><button id="playerClose" type="button">■ 음악 닫기</button><div id="ytPlayer"></div></div><div id="songStatus">공연곡 정보를 불러오는 중입니다.</div></div><div id="menu"><button id="startXR" disabled>📍 실제 AR 시작</button><button id="fallback" disabled>📷 카메라 합성 모드</button><div id="controls"><button id="smaller">－ 작게</button><button id="bigger">＋ 크게</button><button id="left">↶ 회전</button><button id="right">↷ 회전</button><button id="reset">중앙 정렬</button></div></div>
 <script type="importmap">
 {
